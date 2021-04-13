@@ -1,0 +1,6 @@
+composer.phar
+/cache/
+/vendor/
+composer.lock
+/nbproject/
+.php_cs.cache
