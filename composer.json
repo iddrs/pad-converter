@@ -1,8 +1,7 @@
 {
-    "name": "vendor/package_name",
-    "description": "Package description",
+    "name": "iddrs/pad-converter",
+    "description": "Conversor dos dados dos *.txt do SIAPC/PAD para outros formatos.",
     "type": "library",
-    "keywords": ["key word 1", "key word 2"],
     "readme": "README.md",
     "license": "MIT",
     "authors": [
@@ -14,17 +13,22 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/vendor/package_name/issues",
-        "source": "https://github.com/vendor/package_name"
+        "issues": "https://github.com/iddrs/pad-converter/issues",
+        "source": "https://github.com/iddrs/pad-converter"
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "beta",
     "require": {
-        "php": ">=7.4.12"
+        "php": ">=8.0.3",
+        "php-tool-kit/df": "*",
+        "league/booboo": "^2.0",
+        "league/climate": "^3.7",
+        "php-tool-kit/fs": "dev-master"
     },
     "autoload": {
         "psr-4": {
-            "Namespace\\": "src",
-            "Namespace\\Test\\": "tests"
+            "IDDRS\\SIAPC\\PAD\\Converter\\": "src",
+            "IDDRS\\SIAPC\\PAD\\Converter\\Test\\": "tests",
+            "IDDRS\\SIAPC\\PAD\\Converter\\Specification\\": ["src/Specification", "spec"]
         }
     },
     "require-dev": {
