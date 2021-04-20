@@ -1,5 +1,0 @@
-#https://phpstan.org/config-reference
-parameters:
-    level: 8
-    paths:
-        - ../src
