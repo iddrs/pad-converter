@@ -23,7 +23,6 @@ try{
 try{
 
     $reader = new InputReader(...$inputDir);
-//    $writer = new SQLiteWriter($outputSQLite);
     $writer = new CSVWriter($outputCSV);
     $parserFactory = new ParserFactory();
 

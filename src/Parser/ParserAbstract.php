@@ -14,8 +14,9 @@ abstract class ParserAbstract implements ParserInterface
         rewind($data->fileHandle());
         $reader = new FixedWidthFieldReader($data->fileHandle(), false, 1, ...$this->colSizes);
         $dataFrame = new DataFrame($reader);
-        $dataFrame = $this->transform($dataFrame);
+        $dataFrame = $this->removeFinalizador($dataFrame);
         $dataFrame = $this->setColNames($dataFrame, $this->colNames);
+        $dataFrame = $this->transform($dataFrame);
         return $dataFrame;
     }
     
@@ -23,5 +24,13 @@ abstract class ParserAbstract implements ParserInterface
     
     protected function setColNames(DataFrame $dataFrame, array $colNames): DataFrame {
         return $dataFrame->setColNames(...$colNames);
+    }
+    
+    protected function removeFinalizador(DataFrame $dataFrame): DataFrame
+    {
+        $lines = $dataFrame->seek(function(array $line): bool {
+            return str_starts_with(strtolower($line[array_key_first($line)]), 'f');
+        });
+        return $dataFrame->removeLines(...$lines);
     }
 }
