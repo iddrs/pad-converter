@@ -10,7 +10,7 @@ use PTK\FS\Directory;
 use PTK\FS\Path;
 
 /**
- * @todo Descobrir uma forma de formatar todos os campos de moeda para o padrão de decimal separado por vírgula. Talvez rastrear os campos tipo float e converter com number_format()
+ * Escreve os dados para CSV
  */
 class CSVWriter implements WriterInterface
 {
@@ -23,6 +23,8 @@ class CSVWriter implements WriterInterface
     
     public function saveOutput(Data $data): void
     {
+        $data->setDataFrame($this->decimalSeparatorChoice($data->dataFrame()));
+        
         $path = new Path($this->directory->getDirPath(), "{$data->fileId()}.csv");
         $filename = $path->getPath();
         $hasHeader = true;
@@ -35,11 +37,31 @@ class CSVWriter implements WriterInterface
         if($handle === false){
             throw new ErrorException("Não foi possível abrir $filename");
         }
-//        print_r($data->dataFrame());exit();
         $writer = new DataFrameWriter($data->dataFrame(), $handle, ';', $hasHeader);
         $writer->write();
         fclose($handle);
     }
     
-    
+    /**
+     * Formata colunas que tem como tipo predominante o float|double para o formato pt_BR
+     * 
+     * @param DataFrame $dataFrame
+     * @return DataFrame
+     */
+    protected function decimalSeparatorChoice(DataFrame $dataFrame): DataFrame {
+        $colTypes = $dataFrame->getColTypes();
+        
+        foreach($colTypes as $colName => $type){
+            switch($type){
+                case 'double':
+                case 'float':
+                $dataFrame->applyOnCols($colName, function($cell){
+                    return number_format($cell, 2, ',', '.');
+                });
+                break;
+            }
+        }
+        
+        return $dataFrame;
+    }
 }
