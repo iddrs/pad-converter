@@ -74,6 +74,13 @@ class EmpenhoParser extends ParserAbstract {
             $return = ValoresFormatter::trim($cell);
             return $return;
         });
+        
+        $anoEmpenho = [];
+        $data = $dataFrame->getAsArray();
+        foreach ($data as $index => $line){
+            $anoEmpenho[$index] = (int) substr($line['numero_empenho'], 0, 5);
+        }
+        $dataFrame->appendCol('ano_empenho', $anoEmpenho);
 
         return $dataFrame;
     }
