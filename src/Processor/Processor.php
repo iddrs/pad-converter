@@ -2,6 +2,7 @@
 
 namespace IDDRS\SIAPC\PAD\Converter\Processor;
 
+use IDDRS\SIAPC\PAD\Converter\Data\Data;
 use IDDRS\SIAPC\PAD\Converter\Parser\NullParser;
 use IDDRS\SIAPC\PAD\Converter\Parser\ParserFactory;
 use IDDRS\SIAPC\PAD\Converter\Reader\InputReader;
@@ -45,8 +46,31 @@ class Processor {
             
             $input->setDataFrame($parser->parse($input));
             
+            $input = $this->appendHeaderData($input);
+            
             $this->writer->saveOutput($input);
         };
     }
-
+    
+    protected function appendHeaderData(Data $data): Data {
+        $dataFrame = $data->dataFrame();
+        $numLines = $dataFrame->countLines();
+        $initialDate = array_fill(0, $numLines, $data->initialDate()->format('Y-m-d'));
+        $finalDate = array_fill(0, $numLines, $data->finalDate()->format('Y-m-d'));
+        $generationDate = array_fill(0, $numLines, $data->generationDate()->format('Y-m-d'));
+        $cnpj = array_fill(0, $numLines, $data->cnpj());
+        $entityName = array_fill(0, $numLines, $data->entityName());
+        $file = array_fill(0, $numLines, $data->filePath());
+        
+        $dataFrame->appendCol('data_inicial', $initialDate);
+        $dataFrame->appendCol('data_final', $finalDate);
+        $dataFrame->appendCol('data_geracao', $generationDate);
+        $dataFrame->appendCol('cnpj', $cnpj);
+        $dataFrame->appendCol('entidade', $entityName);
+        $dataFrame->appendCol('arquivo', $file);
+        
+        $data->setDataFrame($dataFrame);
+        
+        return $data;
+    }
 }
