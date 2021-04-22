@@ -3,12 +3,11 @@
 namespace IDDRS\SIAPC\PAD\Converter\Formatter;
 
 /**
- * Description of FormatterAbstract
+ * Ferramentas para formatação de dados
  *
  * @author Everton
  */
-abstract class FormatterAbstract {
-    abstract public static function format(string $data): string;
+class FormatterBase {
     
     protected static function applyMask(string $mask, string $data): string {
         $masked = '';

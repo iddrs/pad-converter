@@ -1,8 +1,8 @@
 <?php
+
 /**
  * Converte so txt para SQLite
  */
-
 require_once 'vendor/autoload.php';
 require 'config.php';
 
@@ -14,13 +14,20 @@ use League\CLImate\CLImate;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
-try{
+try {
     $climate = new CLImate;
-}catch(Exception $ex){
+} catch (Exception $ex) {
     echo $ex->getTraceAsString();
 }
 
-try{
+try {
+    $oCSV = new \PTK\FS\Directory($outputCSV);
+    $oCSV->recursive()->delete();
+} catch (Exception $ex) {
+    $climate->backgroundRed()->white()->out($ex->getMessage());
+}
+
+try {
 
     $reader = new InputReader(...$inputDir);
     $writer = new CSVWriter($outputCSV);
@@ -28,9 +35,9 @@ try{
 
     $logger = new Logger('pad-converter');
     $logger->pushHandler(new StreamHandler('php://stdout'));
-    
+
     $processor = new Processor($reader, $writer, $parserFactory, $logger);
     $processor->convert();
 } catch (Exception $ex) {
-    $climate->backgroundRed()->white()->out($ex->getTraceAsString());
+    $climate->backgroundRed()->white()->out($ex->getMessage());
 }
