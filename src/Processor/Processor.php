@@ -2,7 +2,9 @@
 
 namespace IDDRS\SIAPC\PAD\Converter\Processor;
 
+use Exception;
 use IDDRS\SIAPC\PAD\Converter\Data\Data;
+use IDDRS\SIAPC\PAD\Converter\Exception\WarningException;
 use IDDRS\SIAPC\PAD\Converter\Parser\NullParser;
 use IDDRS\SIAPC\PAD\Converter\Parser\ParserFactory;
 use IDDRS\SIAPC\PAD\Converter\Reader\InputReader;
@@ -35,7 +37,7 @@ class Processor {
     public function convert(): void {
         while ($this->reader->valid()) {
             $input = $this->reader->getInput();
-            $this->logger->info("Processando {$input->fileId()} ..." . PHP_EOL);
+            $this->logger->info("Processando {$input->fileId()}");
 
             $parser = $this->parserFactory->getFactory($input->fileId());
             
@@ -43,8 +45,14 @@ class Processor {
                 $this->logger->notice("Parser não localizado para {$input->fileId()}");
                 continue;
             }
-            
-            $input->setDataFrame($parser->parse($input));
+            try{
+                $input->setDataFrame($parser->parse($input));
+            } catch (WarningException $ex) {
+                $this->logger->warning($ex->getMessage());
+                continue;
+            }catch(Exception $ex){
+                throw $ex;
+            }
             
             $input = $this->appendHeaderData($input);
             

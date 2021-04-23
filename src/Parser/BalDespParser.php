@@ -8,34 +8,37 @@ use IDDRS\SIAPC\PAD\Converter\Formatter\ValoresFormatter;
 use IDDRS\SIAPC\PAD\Converter\Parser\ParserAbstract;
 use PTK\DataFrame\DataFrame;
 
-class ReceitaParser extends ParserAbstract {
+class BalDespParser extends ParserAbstract {
 
-    protected array $colSizes = [20, 2, 2, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 12, 12, 12, 12, 12, 12, 3, 4, 4];
+    protected array $colSizes = [2, 2, 2, 3, 4, 3, 5, 6, 4, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 4, 13, 13, 13];
     protected array $colNames = [
-        'codigo_receita',
         'orgao',
         'uniorcam',
-        'receita_realizada_jan',
-        'receita_realizada_fev',
-        'receita_realizada_mar',
-        'receita_realizada_abr',
-        'receita_realizada_mai',
-        'receita_realizada_jun',
-        'receita_realizada_jul',
-        'receita_realizada_ago',
-        'receita_realizada_set',
-        'receita_realizada_out',
-        'receita_realizada_nov',
-        'receita_realizada_dez',
-        'meta_1bim',
-        'meta_2bim',
-        'meta_3bim',
-        'meta_4bim',
-        'meta_5bim',
-        'meta_6bim',
-        'caracteristica_peculiar_receita',
+        'funcao',
+        'subfuncao',
+        'programa',
+        'obsoleto1',
+        'projativ',
+        'elemento',
         'recurso_vinculado',
-        'complemento_recurso_vinculado'
+        'dotacao_inicial',
+        'atualizacao_monetaria',
+        'creditos_suplementares',
+        'creditos_especiais',
+        'creditos_extraordinarios',
+        'reducao_dotacao',
+        'suplementacao_recurso_vinculado',
+        'reducao_recurso_vinculado',
+        'valor_empenhado',
+        'valor_liquidado',
+        'valor_pago',
+        'valor_limitado_lrf',
+        'valor_recomposto_lrf',
+        'previsao_realizacao_lrf',
+        'complemento_recurso_vinculado',
+        'transferencia',
+        'transposicao',
+        'remanejamento'
     ];
 
     public function __construct() {
@@ -45,102 +48,97 @@ class ReceitaParser extends ParserAbstract {
     }
 
     protected function transform(DataFrame $dataFrame): DataFrame {
-        $dataFrame->applyOnCols('codigo_receita', function ($cell): string {
-            $return = CodigosFormatter::naturezaReceita($cell);
-            return $return;
-        });
-        
-        $dataFrame->applyOnLines(function($line){
+        $dataFrame->applyOnLines(function ($line) {
             $return = CodigosFormatter::uniorcam($line);
             return $return;
         });
 
-        $dataFrame->applyOnCols('receita_realizada_jan', function ($cell) {
-            $return = ValoresFormatter::valorSemSinal($cell);
+        $dataFrame->applyOnCols('elemento', function ($cell): string {
+            $return = CodigosFormatter::despesaElemento($cell);
             return $return;
         });
-
-        $dataFrame->applyOnCols('receita_realizada_fev', function ($cell) {
-            $return = ValoresFormatter::valorSemSinal($cell);
-            return $return;
-        });
-
-        $dataFrame->applyOnCols('receita_realizada_mar', function ($cell) {
+        
+        $dataFrame->applyOnCols('dotacao_inicial', function ($cell) {
             $return = ValoresFormatter::valorSemSinal($cell);
             return $return;
         });
         
-        $dataFrame->applyOnCols('receita_realizada_abr', function ($cell) {
+        $dataFrame->applyOnCols('atualizacao_monetaria', function ($cell) {
             $return = ValoresFormatter::valorSemSinal($cell);
             return $return;
         });
         
-        $dataFrame->applyOnCols('receita_realizada_mai', function ($cell) {
+        $dataFrame->applyOnCols('creditos_suplementares', function ($cell) {
             $return = ValoresFormatter::valorSemSinal($cell);
             return $return;
         });
         
-        $dataFrame->applyOnCols('receita_realizada_jun', function ($cell) {
+        $dataFrame->applyOnCols('creditos_especiais', function ($cell) {
             $return = ValoresFormatter::valorSemSinal($cell);
             return $return;
         });
         
-        $dataFrame->applyOnCols('receita_realizada_jul', function ($cell) {
+        $dataFrame->applyOnCols('creditos_extraordinarios', function ($cell) {
             $return = ValoresFormatter::valorSemSinal($cell);
             return $return;
         });
         
-        $dataFrame->applyOnCols('receita_realizada_ago', function ($cell) {
+        $dataFrame->applyOnCols('reducao_dotacao', function ($cell) {
             $return = ValoresFormatter::valorSemSinal($cell);
             return $return;
         });
         
-        $dataFrame->applyOnCols('receita_realizada_set', function ($cell) {
+        $dataFrame->applyOnCols('suplementacao_recurso_vinculado', function ($cell) {
             $return = ValoresFormatter::valorSemSinal($cell);
             return $return;
         });
         
-        $dataFrame->applyOnCols('receita_realizada_out', function ($cell) {
+        $dataFrame->applyOnCols('reducao_recurso_vinculado', function ($cell) {
             $return = ValoresFormatter::valorSemSinal($cell);
             return $return;
         });
         
-        $dataFrame->applyOnCols('receita_realizada_nov', function ($cell) {
+        $dataFrame->applyOnCols('valor_empenhado', function ($cell) {
             $return = ValoresFormatter::valorSemSinal($cell);
             return $return;
         });
         
-        $dataFrame->applyOnCols('receita_realizada_dez', function ($cell) {
+        $dataFrame->applyOnCols('valor_liquidado', function ($cell) {
             $return = ValoresFormatter::valorSemSinal($cell);
             return $return;
         });
         
-        $dataFrame->applyOnCols('meta_1bim', function ($cell) {
+        $dataFrame->applyOnCols('valor_pago', function ($cell) {
             $return = ValoresFormatter::valorSemSinal($cell);
             return $return;
         });
         
-        $dataFrame->applyOnCols('meta_2bim', function ($cell) {
+        $dataFrame->applyOnCols('valor_limitado_lrf', function ($cell) {
             $return = ValoresFormatter::valorSemSinal($cell);
             return $return;
         });
         
-        $dataFrame->applyOnCols('meta_3bim', function ($cell) {
+        $dataFrame->applyOnCols('valor_recomposto_lrf', function ($cell) {
             $return = ValoresFormatter::valorSemSinal($cell);
             return $return;
         });
         
-        $dataFrame->applyOnCols('meta_4bim', function ($cell) {
+        $dataFrame->applyOnCols('previsao_realizacao_lrf', function ($cell) {
             $return = ValoresFormatter::valorSemSinal($cell);
             return $return;
         });
         
-        $dataFrame->applyOnCols('meta_5bim', function ($cell) {
+        $dataFrame->applyOnCols('transferencia', function ($cell) {
             $return = ValoresFormatter::valorSemSinal($cell);
             return $return;
         });
         
-        $dataFrame->applyOnCols('meta_6bim', function ($cell) {
+        $dataFrame->applyOnCols('transposicao', function ($cell) {
+            $return = ValoresFormatter::valorSemSinal($cell);
+            return $return;
+        });
+        
+        $dataFrame->applyOnCols('remanejamento', function ($cell) {
             $return = ValoresFormatter::valorSemSinal($cell);
             return $return;
         });

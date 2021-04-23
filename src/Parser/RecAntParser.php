@@ -8,9 +8,9 @@ use IDDRS\SIAPC\PAD\Converter\Formatter\ValoresFormatter;
 use IDDRS\SIAPC\PAD\Converter\Parser\ParserAbstract;
 use PTK\DataFrame\DataFrame;
 
-class ReceitaParser extends ParserAbstract {
+class RecAntParser extends ParserAbstract {
 
-    protected array $colSizes = [20, 2, 2, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 12, 12, 12, 12, 12, 12, 3, 4, 4];
+    protected array $colSizes = [20, 2, 2, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 3, 4, 4];
     protected array $colNames = [
         'codigo_receita',
         'orgao',
@@ -27,12 +27,6 @@ class ReceitaParser extends ParserAbstract {
         'receita_realizada_out',
         'receita_realizada_nov',
         'receita_realizada_dez',
-        'meta_1bim',
-        'meta_2bim',
-        'meta_3bim',
-        'meta_4bim',
-        'meta_5bim',
-        'meta_6bim',
         'caracteristica_peculiar_receita',
         'recurso_vinculado',
         'complemento_recurso_vinculado'
@@ -111,36 +105,6 @@ class ReceitaParser extends ParserAbstract {
         });
         
         $dataFrame->applyOnCols('receita_realizada_dez', function ($cell) {
-            $return = ValoresFormatter::valorSemSinal($cell);
-            return $return;
-        });
-        
-        $dataFrame->applyOnCols('meta_1bim', function ($cell) {
-            $return = ValoresFormatter::valorSemSinal($cell);
-            return $return;
-        });
-        
-        $dataFrame->applyOnCols('meta_2bim', function ($cell) {
-            $return = ValoresFormatter::valorSemSinal($cell);
-            return $return;
-        });
-        
-        $dataFrame->applyOnCols('meta_3bim', function ($cell) {
-            $return = ValoresFormatter::valorSemSinal($cell);
-            return $return;
-        });
-        
-        $dataFrame->applyOnCols('meta_4bim', function ($cell) {
-            $return = ValoresFormatter::valorSemSinal($cell);
-            return $return;
-        });
-        
-        $dataFrame->applyOnCols('meta_5bim', function ($cell) {
-            $return = ValoresFormatter::valorSemSinal($cell);
-            return $return;
-        });
-        
-        $dataFrame->applyOnCols('meta_6bim', function ($cell) {
             $return = ValoresFormatter::valorSemSinal($cell);
             return $return;
         });

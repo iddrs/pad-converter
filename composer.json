@@ -18,7 +18,7 @@
 	"minimum-stability" : "beta",
 	"require" : {
 		"php" : ">=8.0.3",
-		"php-tool-kit/df" : "*",
+		"php-tool-kit/df" : ">=2.0.0-beta",
 		"league/climate" : "^3.7",
 		"php-tool-kit/fs" : "dev-master",
 		"monolog/monolog" : "~2.2"

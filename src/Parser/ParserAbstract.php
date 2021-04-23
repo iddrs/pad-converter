@@ -2,6 +2,7 @@
 namespace IDDRS\SIAPC\PAD\Converter\Parser;
 
 use IDDRS\SIAPC\PAD\Converter\Data\Data;
+use IDDRS\SIAPC\PAD\Converter\Exception\WarningException;
 use IDDRS\SIAPC\PAD\Converter\Parser\ParserInterface;
 use PTK\DataFrame\DataFrame;
 use PTK\DataFrame\Reader\FixedWidthFieldReader;
@@ -15,6 +16,9 @@ abstract class ParserAbstract implements ParserInterface
         $reader = new FixedWidthFieldReader($data->fileHandle(), false, 1, ...$this->colSizes);
         $dataFrame = new DataFrame($reader);
         $dataFrame = $this->removeFinalizador($dataFrame);
+        if($dataFrame->countLines() === 0){
+            throw new WarningException("{$data->fileId()} não tem dados para converter.");
+        }
         $dataFrame = $this->setColNames($dataFrame, $this->colNames);
         $dataFrame = $this->transform($dataFrame);
         return $dataFrame;

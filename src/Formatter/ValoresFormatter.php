@@ -9,9 +9,13 @@ namespace IDDRS\SIAPC\PAD\Converter\Formatter;
  */
 class ValoresFormatter extends FormatterBase {
 
-    public static function dataStrToStr(string $date): string {
+    public static function dataStrToStr(string $date): ?string {
         $dateObj = date_create_from_format('dmY', $date);
-        return $dateObj->format('Y-m-d');
+        if (checkdate($dateObj->format('m'), $dateObj->format('d'), $dateObj->format('Y'))) {
+            return $dateObj->format('Y-m-d');
+        }
+        
+        return null;
     }
 
     public static function valorSemSinal(string $valor): float {
@@ -20,8 +24,8 @@ class ValoresFormatter extends FormatterBase {
 
     public static function valorComSinal(string $campoValor, string $campoSinal, array $line): array {
         $valor = round($line[$campoValor] / 100, 2);
-        
-        switch ($line[$campoSinal]){
+
+        switch ($line[$campoSinal]) {
             case '+':
                 $valor = $valor;
                 break;
@@ -32,7 +36,7 @@ class ValoresFormatter extends FormatterBase {
                 print_r($line);
                 throw new ErrorException("Sinal inválido na linha de sinal do valor.");
         }
-        
+
         $line[$campoValor] = $valor;
         return $line;
     }

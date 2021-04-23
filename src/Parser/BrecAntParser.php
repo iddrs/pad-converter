@@ -8,9 +8,9 @@ use IDDRS\SIAPC\PAD\Converter\Formatter\ValoresFormatter;
 use IDDRS\SIAPC\PAD\Converter\Parser\ParserAbstract;
 use PTK\DataFrame\DataFrame;
 
-class BalRecParser extends ParserAbstract {
+class BrecAntParser extends ParserAbstract {
 
-    protected array $colSizes = [20, 2, 2, 13, 13, 4, 170, 1, 2, 3, 13, 4];
+    protected array $colSizes = [20, 2, 2, 13, 13, 4, 170, 1, 2, 3, 4];
     protected array $colNames = [
         'codigo_receita',
         'orgao',
@@ -22,7 +22,6 @@ class BalRecParser extends ParserAbstract {
         'tipo_nivel',
         'numero_nivel',
         'caracteristica_peculiar_receita',
-        'previsao_atualizada',
         'complemento_recurso_vinculado'
     ];
 
@@ -49,11 +48,6 @@ class BalRecParser extends ParserAbstract {
         });
 
         $dataFrame->applyOnCols('receita_realizada', function ($cell) {
-            $return = ValoresFormatter::valorSemSinal($cell);
-            return $return;
-        });
-
-        $dataFrame->applyOnCols('previsao_atualizada', function ($cell) {
             $return = ValoresFormatter::valorSemSinal($cell);
             return $return;
         });

@@ -8,33 +8,37 @@ use IDDRS\SIAPC\PAD\Converter\Formatter\ValoresFormatter;
 use IDDRS\SIAPC\PAD\Converter\Parser\ParserAbstract;
 use PTK\DataFrame\DataFrame;
 
-class ReceitaParser extends ParserAbstract {
+class BrubAntParser extends ParserAbstract {
 
-    protected array $colSizes = [20, 2, 2, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 12, 12, 12, 12, 12, 12, 3, 4, 4];
+    protected array $colSizes = [2, 2, 2, 3, 4, 3, 5, 15, 4, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 4];
     protected array $colNames = [
-        'codigo_receita',
         'orgao',
         'uniorcam',
-        'receita_realizada_jan',
-        'receita_realizada_fev',
-        'receita_realizada_mar',
-        'receita_realizada_abr',
-        'receita_realizada_mai',
-        'receita_realizada_jun',
-        'receita_realizada_jul',
-        'receita_realizada_ago',
-        'receita_realizada_set',
-        'receita_realizada_out',
-        'receita_realizada_nov',
-        'receita_realizada_dez',
-        'meta_1bim',
-        'meta_2bim',
-        'meta_3bim',
-        'meta_4bim',
-        'meta_5bim',
-        'meta_6bim',
-        'caracteristica_peculiar_receita',
+        'funcao',
+        'subfuncao',
+        'programa',
+        'obsoleto1',
+        'projativ',
+        'rubrica',
         'recurso_vinculado',
+        'empenhado_1bim',
+        'empenhado_2bim',
+        'empenhado_3bim',
+        'empenhado_4bim',
+        'empenhado_5bim',
+        'empenhado_6bim',
+        'liquidado_1bim',
+        'liquidado_2bim',
+        'liquidado_3bim',
+        'liquidado_4bim',
+        'liquidado_5bim',
+        'liquidado_6bim',
+        'pago_1bim',
+        'pago_2bim',
+        'pago_3bim',
+        'pago_4bim',
+        'pago_5bim',
+        'pago_6bim',
         'complemento_recurso_vinculado'
     ];
 
@@ -45,102 +49,102 @@ class ReceitaParser extends ParserAbstract {
     }
 
     protected function transform(DataFrame $dataFrame): DataFrame {
-        $dataFrame->applyOnCols('codigo_receita', function ($cell): string {
-            $return = CodigosFormatter::naturezaReceita($cell);
-            return $return;
-        });
-        
-        $dataFrame->applyOnLines(function($line){
+        $dataFrame->applyOnLines(function ($line) {
             $return = CodigosFormatter::uniorcam($line);
             return $return;
         });
 
-        $dataFrame->applyOnCols('receita_realizada_jan', function ($cell) {
+        $dataFrame->applyOnCols('rubrica', function ($cell): string {
+            $return = CodigosFormatter::despesaDesdobramento($cell);
+            return $return;
+        });
+
+        $dataFrame->applyOnCols('empenhado_1bim', function ($cell) {
             $return = ValoresFormatter::valorSemSinal($cell);
             return $return;
         });
 
-        $dataFrame->applyOnCols('receita_realizada_fev', function ($cell) {
+        $dataFrame->applyOnCols('empenhado_2bim', function ($cell) {
             $return = ValoresFormatter::valorSemSinal($cell);
             return $return;
         });
 
-        $dataFrame->applyOnCols('receita_realizada_mar', function ($cell) {
+        $dataFrame->applyOnCols('empenhado_3bim', function ($cell) {
             $return = ValoresFormatter::valorSemSinal($cell);
             return $return;
         });
-        
-        $dataFrame->applyOnCols('receita_realizada_abr', function ($cell) {
+
+        $dataFrame->applyOnCols('empenhado_4bim', function ($cell) {
             $return = ValoresFormatter::valorSemSinal($cell);
             return $return;
         });
-        
-        $dataFrame->applyOnCols('receita_realizada_mai', function ($cell) {
+
+        $dataFrame->applyOnCols('empenhado_5bim', function ($cell) {
             $return = ValoresFormatter::valorSemSinal($cell);
             return $return;
         });
-        
-        $dataFrame->applyOnCols('receita_realizada_jun', function ($cell) {
+
+        $dataFrame->applyOnCols('empenhado_6bim', function ($cell) {
             $return = ValoresFormatter::valorSemSinal($cell);
             return $return;
         });
-        
-        $dataFrame->applyOnCols('receita_realizada_jul', function ($cell) {
+
+        $dataFrame->applyOnCols('liquidado_1bim', function ($cell) {
             $return = ValoresFormatter::valorSemSinal($cell);
             return $return;
         });
-        
-        $dataFrame->applyOnCols('receita_realizada_ago', function ($cell) {
+
+        $dataFrame->applyOnCols('liquidado_2bim', function ($cell) {
             $return = ValoresFormatter::valorSemSinal($cell);
             return $return;
         });
-        
-        $dataFrame->applyOnCols('receita_realizada_set', function ($cell) {
+
+        $dataFrame->applyOnCols('liquidado_3bim', function ($cell) {
             $return = ValoresFormatter::valorSemSinal($cell);
             return $return;
         });
-        
-        $dataFrame->applyOnCols('receita_realizada_out', function ($cell) {
+
+        $dataFrame->applyOnCols('liquidado_4bim', function ($cell) {
             $return = ValoresFormatter::valorSemSinal($cell);
             return $return;
         });
-        
-        $dataFrame->applyOnCols('receita_realizada_nov', function ($cell) {
+
+        $dataFrame->applyOnCols('liquidado_5bim', function ($cell) {
             $return = ValoresFormatter::valorSemSinal($cell);
             return $return;
         });
-        
-        $dataFrame->applyOnCols('receita_realizada_dez', function ($cell) {
+
+        $dataFrame->applyOnCols('liquidado_6bim', function ($cell) {
             $return = ValoresFormatter::valorSemSinal($cell);
             return $return;
         });
-        
-        $dataFrame->applyOnCols('meta_1bim', function ($cell) {
+
+        $dataFrame->applyOnCols('pago_1bim', function ($cell) {
             $return = ValoresFormatter::valorSemSinal($cell);
             return $return;
         });
-        
-        $dataFrame->applyOnCols('meta_2bim', function ($cell) {
+
+        $dataFrame->applyOnCols('pago_2bim', function ($cell) {
             $return = ValoresFormatter::valorSemSinal($cell);
             return $return;
         });
-        
-        $dataFrame->applyOnCols('meta_3bim', function ($cell) {
+
+        $dataFrame->applyOnCols('pago_3bim', function ($cell) {
             $return = ValoresFormatter::valorSemSinal($cell);
             return $return;
         });
-        
-        $dataFrame->applyOnCols('meta_4bim', function ($cell) {
+
+        $dataFrame->applyOnCols('pago_4bim', function ($cell) {
             $return = ValoresFormatter::valorSemSinal($cell);
             return $return;
         });
-        
-        $dataFrame->applyOnCols('meta_5bim', function ($cell) {
+
+        $dataFrame->applyOnCols('pago_5bim', function ($cell) {
             $return = ValoresFormatter::valorSemSinal($cell);
             return $return;
         });
-        
-        $dataFrame->applyOnCols('meta_6bim', function ($cell) {
+
+        $dataFrame->applyOnCols('pago_6bim', function ($cell) {
             $return = ValoresFormatter::valorSemSinal($cell);
             return $return;
         });

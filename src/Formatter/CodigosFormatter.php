@@ -33,8 +33,14 @@ class CodigosFormatter extends FormatterBase {
         return $data;
     }
 
-    public static function uniorcam(array $line): array {
-        $line['uniorcam'] = str_pad($line['orgao'], 2, '0', STR_PAD_LEFT) . str_pad($line['uniorcam'], 2, '0', STR_PAD_LEFT);
+    public static function despesaElemento(string $data): string {
+        $data = self::trimLeftZeros($data);
+        $data = self::applyMask('#.#.##.##', $data);
+        return $data;
+    }
+
+    public static function uniorcam(array $line, string $campoOrgao = 'orgao', string $campoUniorcam = 'uniorcam'): array {
+        $line[$campoUniorcam] = str_pad($line[$campoOrgao], 2, '0', STR_PAD_LEFT) . str_pad($line[$campoUniorcam], 2, '0', STR_PAD_LEFT);
         return $line;
     }
 

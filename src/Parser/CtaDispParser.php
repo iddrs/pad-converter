@@ -8,21 +8,19 @@ use IDDRS\SIAPC\PAD\Converter\Formatter\ValoresFormatter;
 use IDDRS\SIAPC\PAD\Converter\Parser\ParserAbstract;
 use PTK\DataFrame\DataFrame;
 
-class BalRecParser extends ParserAbstract {
+class CtaDispParser extends ParserAbstract {
 
-    protected array $colSizes = [20, 2, 2, 13, 13, 4, 170, 1, 2, 3, 13, 4];
+    protected array $colSizes = [20,2,2,4,5,5,20,1,1,4];
     protected array $colNames = [
-        'codigo_receita',
+        'conta_contabil',
         'orgao',
         'uniorcam',
-        'receita_orcada',
-        'receita_realizada',
         'recurso_vinculado',
-        'especificacao_receita',
-        'tipo_nivel',
-        'numero_nivel',
-        'caracteristica_peculiar_receita',
-        'previsao_atualizada',
+        'banco',
+        'agencia',
+        'conta_corrente',
+        'tipo_conta_corrente',
+        'classificacao_disponivel',
         'complemento_recurso_vinculado'
     ];
 
@@ -33,8 +31,8 @@ class BalRecParser extends ParserAbstract {
     }
 
     protected function transform(DataFrame $dataFrame): DataFrame {
-        $dataFrame->applyOnCols('codigo_receita', function ($cell): string {
-            $return = CodigosFormatter::naturezaReceita($cell);
+        $dataFrame->applyOnCols('conta_contabil', function ($cell) {
+            $return = CodigosFormatter::contaContabil($cell);
             return $return;
         });
         
@@ -42,27 +40,22 @@ class BalRecParser extends ParserAbstract {
             $return = CodigosFormatter::uniorcam($line);
             return $return;
         });
-
-        $dataFrame->applyOnCols('receita_orcada', function ($cell) {
-            $return = ValoresFormatter::valorSemSinal($cell);
-            return $return;
-        });
-
-        $dataFrame->applyOnCols('receita_realizada', function ($cell) {
-            $return = ValoresFormatter::valorSemSinal($cell);
-            return $return;
-        });
-
-        $dataFrame->applyOnCols('previsao_atualizada', function ($cell) {
-            $return = ValoresFormatter::valorSemSinal($cell);
-            return $return;
-        });
-
-        $dataFrame->applyOnCols('especificacao_receita', function ($cell) {
+        
+        $dataFrame->applyOnCols('banco', function ($cell) {
             $return = ValoresFormatter::trim($cell);
             return $return;
         });
-
+        
+        $dataFrame->applyOnCols('agencia', function ($cell) {
+            $return = ValoresFormatter::trim($cell);
+            return $return;
+        });
+        
+        $dataFrame->applyOnCols('conta_corrente', function ($cell) {
+            $return = ValoresFormatter::trim($cell);
+            return $return;
+        });
+        
         return $dataFrame;
     }
 
