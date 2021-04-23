@@ -3,11 +3,11 @@
 use PTK\FS\Path;
 
 /**
- * Arquivo de configura��o coms os par�metros de convers�o
+ * Arquivo de configuração coms os parâmetros de conversão
  * 
  */
 
-$mes = 3;
+$mes = 2;
 $ano = 2021;
 
 

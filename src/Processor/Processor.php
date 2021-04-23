@@ -40,26 +40,31 @@ class Processor {
             $this->logger->info("Processando {$input->fileId()}");
 
             $parser = $this->parserFactory->getFactory($input->fileId());
-            
-            if($parser instanceof NullParser){
+
+            if ($parser instanceof NullParser) {
                 $this->logger->notice("Parser não localizado para {$input->fileId()}");
                 continue;
             }
-            try{
+            try {
                 $input->setDataFrame($parser->parse($input));
             } catch (WarningException $ex) {
                 $this->logger->warning($ex->getMessage());
                 continue;
-            }catch(Exception $ex){
+            } catch (Exception $ex) {
                 throw $ex;
             }
-            
+
             $input = $this->appendHeaderData($input);
-            
-            $this->writer->saveOutput($input);
+            try {
+                $this->writer->saveOutput($input);
+            } catch (WarningException $ex) {
+                $this->logger->warning($ex->getMessage());
+            } catch (\Exception $ex) {
+                throw $ex;
+            }
         };
     }
-    
+
     protected function appendHeaderData(Data $data): Data {
         $dataFrame = $data->dataFrame();
         $numLines = $dataFrame->countLines();
@@ -69,16 +74,17 @@ class Processor {
         $cnpj = array_fill(0, $numLines, $data->cnpj());
         $entityName = array_fill(0, $numLines, $data->entityName());
         $file = array_fill(0, $numLines, $data->filePath());
-        
+
         $dataFrame->appendCol('data_inicial', $initialDate);
         $dataFrame->appendCol('data_final', $finalDate);
         $dataFrame->appendCol('data_geracao', $generationDate);
         $dataFrame->appendCol('cnpj', $cnpj);
         $dataFrame->appendCol('entidade', $entityName);
         $dataFrame->appendCol('arquivo', $file);
-        
+
         $data->setDataFrame($dataFrame);
-        
+
         return $data;
     }
+
 }

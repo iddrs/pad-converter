@@ -9,10 +9,11 @@ require 'config.php';
 use IDDRS\SIAPC\PAD\Converter\Parser\ParserFactory;
 use IDDRS\SIAPC\PAD\Converter\Processor\Processor;
 use IDDRS\SIAPC\PAD\Converter\Reader\InputReader;
-use IDDRS\SIAPC\PAD\Converter\Writer\CSVWriter;
+use IDDRS\SIAPC\PAD\Converter\Writer\SQLiteWriter;
 use League\CLImate\CLImate;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use PTK\FS\Directory;
 
 try {
     $climate = new CLImate;
@@ -21,8 +22,9 @@ try {
 }
 
 try {
-    $oCSV = new \PTK\FS\Directory($outputCSV);
-    $oCSV->recursive()->delete();
+    if(file_exists($outputSQLite)){
+        unlink($outputSQLite);
+    }
 } catch (Exception $ex) {
     $climate->backgroundRed()->white()->out($ex->getMessage());
 }
@@ -30,25 +32,14 @@ try {
 try {
 
     $reader = new InputReader(...$inputDir);
-    $writer = new CSVWriter($outputCSV);
+    $writer = new SQLiteWriter($outputSQLite);
     $parserFactory = new ParserFactory();
 
     $logger = new Logger('pad-converter');
     $logger->pushHandler(new StreamHandler('php://stdout'));
-//    $handler = new Monolog\Handler\PsrHandler($logger);
-//    $handler->setFormatter(new Monolog\Formatter\LineFormatter("[%datetime%] %level_name%: %message%\n"));
-//    $logger->pushHandler($handler);
 
     $processor = new Processor($reader, $writer, $parserFactory, $logger);
     $processor->convert();
 } catch (Exception $ex) {
     $climate->backgroundRed()->white()->out($ex->getMessage());
 }
-
-//try {
-//    $latest = $oCSV->getParent()
-//    $oCSV = new \PTK\FS\Directory($outputCSV);
-//    $oCSV->copy($latest);
-//} catch (Exception $ex) {
-//    $climate->backgroundRed()->white()->out($ex->getMessage());
-//}
