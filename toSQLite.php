@@ -10,15 +10,17 @@ use IDDRS\SIAPC\PAD\Converter\Parser\ParserFactory;
 use IDDRS\SIAPC\PAD\Converter\Processor\Processor;
 use IDDRS\SIAPC\PAD\Converter\Reader\InputReader;
 use IDDRS\SIAPC\PAD\Converter\Writer\SQLiteWriter;
-use League\CLImate\CLImate;
-use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
-use PTK\FS\Directory;
+use PTK\Log\Formatter\CLImateFormatter;
+use PTK\Log\Logger\Logger;
+use PTK\Log\Writer\CLImateWriter;
 
-try {
-    $climate = new CLImate;
+try{
+    $defaultWriter = new CLImateWriter();
+    $defaultFormatter = new CLImateFormatter();
+    $logger = new Logger($defaultWriter, $defaultFormatter);
 } catch (Exception $ex) {
-    echo $ex->getTraceAsString();
+    echo $ex->getMessage();
+    exit($ex->getCode());
 }
 
 try {
@@ -26,7 +28,8 @@ try {
         unlink($outputSQLite);
     }
 } catch (Exception $ex) {
-    $climate->backgroundRed()->white()->out($ex->getMessage());
+    $logger->emergency($ex->getMessage());
+    exit($ex->getCode());
 }
 
 try {
@@ -34,9 +37,6 @@ try {
     $reader = new InputReader(...$inputDir);
     $writer = new SQLiteWriter($outputSQLite);
     $parserFactory = new ParserFactory();
-
-    $logger = new Logger('pad-converter');
-    $logger->pushHandler(new StreamHandler('php://stdout'));
 
     $processor = new Processor($reader, $writer, $parserFactory, $logger);
     $processor->convert();

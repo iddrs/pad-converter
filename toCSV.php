@@ -10,21 +10,26 @@ use IDDRS\SIAPC\PAD\Converter\Parser\ParserFactory;
 use IDDRS\SIAPC\PAD\Converter\Processor\Processor;
 use IDDRS\SIAPC\PAD\Converter\Reader\InputReader;
 use IDDRS\SIAPC\PAD\Converter\Writer\CSVWriter;
-use League\CLImate\CLImate;
-use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
+use PTK\FS\Directory;
+use PTK\Log\Formatter\CLImateFormatter;
+use PTK\Log\Logger\Logger;
+use PTK\Log\Writer\CLImateWriter;
 
-try {
-    $climate = new CLImate;
+try{
+    $defaultWriter = new CLImateWriter();
+    $defaultFormatter = new CLImateFormatter();
+    $logger = new Logger($defaultWriter, $defaultFormatter);
 } catch (Exception $ex) {
-    echo $ex->getTraceAsString();
+    echo $ex->getMessage();
+    exit($ex->getCode());
 }
 
 try {
-    $oCSV = new \PTK\FS\Directory($outputCSV);
+    $oCSV = new Directory($outputCSV);
     $oCSV->recursive()->delete();
 } catch (Exception $ex) {
-    $climate->backgroundRed()->white()->out($ex->getMessage());
+    $logger->emergency($ex->getMessage());
+    exit($ex->getCode());
 }
 
 try {
@@ -33,22 +38,8 @@ try {
     $writer = new CSVWriter($outputCSV);
     $parserFactory = new ParserFactory();
 
-    $logger = new Logger('pad-converter');
-    $logger->pushHandler(new StreamHandler('php://stdout'));
-//    $handler = new Monolog\Handler\PsrHandler($logger);
-//    $handler->setFormatter(new Monolog\Formatter\LineFormatter("[%datetime%] %level_name%: %message%\n"));
-//    $logger->pushHandler($handler);
-
     $processor = new Processor($reader, $writer, $parserFactory, $logger);
     $processor->convert();
 } catch (Exception $ex) {
-    $climate->backgroundRed()->white()->out($ex->getMessage());
+    $logger->emergency($ex->getMessage());
 }
-
-//try {
-//    $latest = $oCSV->getParent()
-//    $oCSV = new \PTK\FS\Directory($outputCSV);
-//    $oCSV->copy($latest);
-//} catch (Exception $ex) {
-//    $climate->backgroundRed()->white()->out($ex->getMessage());
-//}
