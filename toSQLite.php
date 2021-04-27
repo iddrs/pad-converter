@@ -25,6 +25,7 @@ try{
 
 try {
     if(file_exists($outputSQLite)){
+        $logger->info('Apagando conteúdo original...');
         unlink($outputSQLite);
     }
 } catch (Exception $ex) {
@@ -41,5 +42,14 @@ try {
     $processor = new Processor($reader, $writer, $parserFactory, $logger);
     $processor->convert();
 } catch (Exception $ex) {
-    $climate->backgroundRed()->white()->out($ex->getMessage());
+    $logger->emergency($ex->getMessage());
+}
+
+try {
+    $output = new PTK\FS\File($outputSQLite);
+    $latestFile = new PTK\FS\Path($output->getFileDir(), 'latest.sqlite');
+    $output->copy($latestFile->getPath());
+} catch (Exception $ex) {
+    $logger->error($ex->getMessage());
+    exit($ex->getCode());
 }

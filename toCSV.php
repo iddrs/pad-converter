@@ -15,7 +15,7 @@ use PTK\Log\Formatter\CLImateFormatter;
 use PTK\Log\Logger\Logger;
 use PTK\Log\Writer\CLImateWriter;
 
-try{
+try {
     $defaultWriter = new CLImateWriter();
     $defaultFormatter = new CLImateFormatter();
     $logger = new Logger($defaultWriter, $defaultFormatter);
@@ -25,6 +25,7 @@ try{
 }
 
 try {
+    $logger->info('Apagando conteúdo original...');
     $oCSV = new Directory($outputCSV);
     $oCSV->recursive()->delete();
 } catch (Exception $ex) {
@@ -42,4 +43,18 @@ try {
     $processor->convert();
 } catch (Exception $ex) {
     $logger->emergency($ex->getMessage());
+}
+
+try {
+    $logger->info('Apagando conteúdo de latest...');
+    $latestPath = new PTK\FS\Path(dirname($outputCSV), 'latest');
+    $latestDir = new Directory($latestPath->getPath());
+    $latestDir->delete();
+    
+    $logger->info('Copiando conteúdo para latest...');
+    $output = new Directory($outputCSV);
+    $output->copy($latestPath->getPath());
+} catch (Exception $ex) {
+    $logger->error($ex->getMessage());
+    exit($ex->getCode());
 }
