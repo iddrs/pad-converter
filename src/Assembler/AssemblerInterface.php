@@ -1,9 +1,7 @@
 <?php
-
-use PTK\DataFrame\DataFrame;
-
 namespace IDDRS\SIAPC\PAD\Converter\Assembler;
 
+use PTK\DataFrame\DataFrame;
 /**
  *
  * @author Everton
