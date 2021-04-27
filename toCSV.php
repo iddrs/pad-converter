@@ -36,7 +36,7 @@ try {
     $oCSV = new Directory($outputCSV);
     $oCSV->recursive()->delete();
 } catch (Exception $ex) {
-    $logger->emergency($ex->getMessage());
+    $logger->notice($ex->getMessage());
     exit($ex->getCode());
 }
 
@@ -50,6 +50,7 @@ try {
     $processor->convert();
 } catch (Exception $ex) {
     $logger->emergency($ex->getMessage());
+    exit($ex->getCode());
 }
 
 try {

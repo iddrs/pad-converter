@@ -7,6 +7,11 @@ require_once 'vendor/autoload.php';
 require 'config.php';
 
 use IDDRS\SIAPC\PAD\Converter\Assembler\LiquidacaoAssembler;
+use IDDRS\SIAPC\PAD\Converter\Assembler\PagamentoAssembler;
+use IDDRS\SIAPC\PAD\Converter\Processor\Processor;
+use IDDRS\SIAPC\PAD\Converter\Reader\InputReader;
+use IDDRS\SIAPC\PAD\Converter\Writer\SQLiteWriter;
+use IDDRS\SIAPC\PAD\Converter\Parser\ParserFactory;
 use PTK\DataFrame\DataFrame;
 use PTK\DataFrame\Reader\PDOReader;
 use PTK\DataFrame\Writer\PDOWriter;
@@ -31,7 +36,7 @@ try {
         unlink($outputSQLite);
     }
 } catch (Exception $ex) {
-    $logger->emergency($ex->getMessage());
+    $logger->notice($ex->getMessage());
     exit($ex->getCode());
 }
 
@@ -45,6 +50,7 @@ try {
     $processor->convert();
 } catch (Exception $ex) {
     $logger->emergency($ex->getMessage());
+    exit($ex->getCode());
 }
 
 try {
@@ -83,7 +89,7 @@ try {
     $stmtPagament = $pdo->query("SELECT * FROM PAGAMENT");
     $pagament = new DataFrame(new PDOReader($stmtPagament));
         
-    $pagamentoAssembler = new IDDRS\SIAPC\PAD\Converter\Assembler\PagamentoAssembler($pagament, $empenho);
+    $pagamentoAssembler = new PagamentoAssembler($pagament, $empenho);
     $dfPagamento = $pagamentoAssembler->assemble();
     
     PDOWriter::createSQliteTable($dfPagamento, $pdo, 'PAGAMENTO');
