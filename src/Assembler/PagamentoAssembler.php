@@ -10,7 +10,7 @@ use PTK\DataFrame\Reader\ArrayReader;
  *
  * @author Everton
  */
-class PagamentoAssembler {
+class PagamentoAssembler implements AssemblerInterface {
 
     protected DataFrame $pagament;
     protected DataFrame $empenho;

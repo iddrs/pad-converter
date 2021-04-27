@@ -37,7 +37,6 @@ try {
     $oCSV->recursive()->delete();
 } catch (Exception $ex) {
     $logger->notice($ex->getMessage());
-    exit($ex->getCode());
 }
 
 try {

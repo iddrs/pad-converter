@@ -10,7 +10,7 @@ use PTK\DataFrame\Reader\ArrayReader;
  *
  * @author Everton
  */
-class LiquidacaoAssembler {
+class LiquidacaoAssembler implements AssemblerInterface {
 
     protected DataFrame $liquidac;
     protected DataFrame $empenho;
