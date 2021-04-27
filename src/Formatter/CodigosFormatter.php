@@ -54,5 +54,15 @@ class CodigosFormatter extends FormatterBase {
 
         return $data;
     }
+    
+    public static function cpf(string $data): string {
+        $data = self::applyMask('###.###.###-##', $data);
+        return $data;
+    }
+    
+    public static function cnpj(string $data): string {
+        $data = self::applyMask('##.###.###/####-##', $data);
+        return $data;
+    }
 
 }

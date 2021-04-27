@@ -75,6 +75,11 @@ class EmpenhoParser extends ParserAbstract {
             return $return;
         });
         
+        $dataFrame->applyOnCols('cnpj_gerenciador_licitacao_compartilhada', function ($cell) {
+            $return = CodigosFormatter::cnpj($cell);
+            return $return;
+        });
+        
         $anoEmpenho = [];
         $data = $dataFrame->getAsArray();
         foreach ($data as $index => $line){

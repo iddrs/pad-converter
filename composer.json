@@ -1,44 +1,37 @@
 {
-	"name" : "iddrs/pad-converter",
-	"description" : "Conversor dos dados dos *.txt do SIAPC/PAD para outros formatos.",
-	"type" : "library",
-	"readme" : "README.md",
-	"license" : "MIT",
-	"authors" : [{
-			"name" : "Everton da Rosa",
-			"email" : "everton3x@gmail.com",
-			"homepage" : "https://everton3x.github.io",
-			"role" : "developer"
-		}
-	],
-	"support" : {
-		"issues" : "https://github.com/iddrs/pad-converter/issues",
-		"source" : "https://github.com/iddrs/pad-converter"
-	},
-	"minimum-stability" : "dev",
-	"require" : {
-		"php" : ">=8.0.3",
-		"php-tool-kit/df" : "dev-main",
-		"php-tool-kit/fs" : "dev-master",
-		"php-tool-kit/log": "dev-main"
-	},
-	"autoload" : {
-		"psr-4" : {
-			"IDDRS\\SIAPC\\PAD\\Converter\\" : "src"
-		}
-	},
-	"scripts" : {
-		"push" : [
-			"git add .",
-			"git commit",
-			"git push"
-		],
-		"phpdoc" : "php ./tools/phpDocumentor.phar --config conf/phpdocumentor.xml",
-		"phpunit" : "phpunit.bat --configuration conf/phpunit.xml",
-		"phpstan" : "phpstan analyse -c conf/phpstan.neon",
-		"phpmd" : "phpmd src ansi cleancode,codesize,controversial,design,naming,unusedcode",
-		"phpcs" : "phpcs -p --standard=PSR12 src tests",
-		"phpcbf" : "phpcbf -p --standard=PSR12 src tests",
-		"phpcpd" : "php ./tools/phpcpd.phar --fuzzy src"
-	}
+    "name": "iddrs/pad-converter",
+    "description": "Conversor dos dados dos *.txt do SIAPC/PAD para outros formatos.",
+    "type": "library",
+    "readme": "README.md",
+    "license": "MIT",
+    "authors": [{
+            "name": "Everton da Rosa",
+            "email": "everton3x@gmail.com",
+            "homepage": "https://everton3x.github.io",
+            "role": "developer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/iddrs/pad-converter/issues",
+        "source": "https://github.com/iddrs/pad-converter"
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=8.0.3",
+        "php-tool-kit/df": "dev-main",
+        "php-tool-kit/fs": "dev-master",
+        "php-tool-kit/log": "dev-main"
+    },
+    "autoload": {
+        "psr-4": {
+            "IDDRS\\SIAPC\\PAD\\Converter\\": "src"
+        }
+    },
+    "scripts": {
+        "push": [
+            "git add .",
+            "git commit",
+            "git push"
+        ]
+    }
 }

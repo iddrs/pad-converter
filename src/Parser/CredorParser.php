@@ -53,6 +53,19 @@ class CredorParser extends ParserAbstract {
             $return = ValoresFormatter::trim($cell);
             return $return;
         });
+        
+        $dataFrame->applyOnLines(function ($line) {
+            if($line['tipo_pessoa'] == 1){
+                $cpf = substr($line['cnpj_cpf'], 3);
+                if(strlen($cpf) === 11){
+                    $line['cnpj_cpf'] = CodigosFormatter::cpf($cpf);
+                }
+            }
+            if($line['tipo_pessoa'] == 2){
+                $line['cnpj_cpf'] = CodigosFormatter::cnpj($line['cnpj_cpf']);
+            }
+            return $line;
+        });
 
         return $dataFrame;
     }
