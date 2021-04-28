@@ -7,6 +7,6 @@ namespace IDDRS\SIAPC\PAD\Converter\Assembler;
  *
  * @author Everton
  */
-class RestosAPagerAssembler implements AssemblerInterface {
+class RestosAPagarAssembler implements AssemblerInterface {
     
 }
