@@ -3,5 +3,5 @@
 notepad.exe config.php
 
 php toCSV.php
-php toSQLite.php
+rem php toSQLite.php
 

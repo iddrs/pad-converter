@@ -6,17 +6,10 @@
 require_once 'vendor/autoload.php';
 require 'config.php';
 
-use IDDRS\SIAPC\PAD\Converter\Assembler\LiquidacaoAssembler;
-use IDDRS\SIAPC\PAD\Converter\Assembler\PagamentoAssembler;
-use IDDRS\SIAPC\PAD\Converter\Processor\Processor;
-use IDDRS\SIAPC\PAD\Converter\Reader\InputReader;
-use IDDRS\SIAPC\PAD\Converter\Writer\SQLiteWriter;
-use IDDRS\SIAPC\PAD\Converter\Parser\ParserFactory;
+use IDDRS\SIAPC\PAD\Converter\Assembler\RestosAPagarAssembler;
 use PTK\DataFrame\DataFrame;
 use PTK\DataFrame\Reader\PDOReader;
 use PTK\DataFrame\Writer\PDOWriter;
-use PTK\FS\File;
-use PTK\FS\Path;
 use PTK\Log\Formatter\CLImateFormatter;
 use PTK\Log\Logger\Logger;
 use PTK\Log\Writer\CLImateWriter;
@@ -30,7 +23,7 @@ try{
     exit($ex->getCode());
 }
 
-try {
+/*try {
     if(file_exists($outputSQLite)){
         $logger->info('Apagando conteúdo original...');
         unlink($outputSQLite);
@@ -102,13 +95,41 @@ try {
     exit($ex->getCode());
 }
 
-
+*/
 
 try {
+    $logger->info('Gerando arquivo RESTOS_PAGAR...');
+    $pdo = new PDO("sqlite:$outputSQLite");
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
+    $stmtEmpenho = $pdo->query("SELECT * FROM EMPENHO");
+    $empenho = new DataFrame(new PDOReader($stmtEmpenho));
+    
+    $stmtLiquidac = $pdo->query("SELECT * FROM LIQUIDAC");
+    $liquidac = new DataFrame(new PDOReader($stmtLiquidac));
+    
+    $stmtPagament = $pdo->query("SELECT * FROM PAGAMENT");
+    $pagament = new DataFrame(new PDOReader($stmtPagament));
+        
+    $rpAssembler = new RestosAPagarAssembler($empenho, $liquidac, $pagament);
+    $dfRP = $rpAssembler->assemble();
+    print_r($dfRP->getAsArray());exit();
+    PDOWriter::createSQliteTable($dfRP, $pdo, 'RESTOS_PAGAR');
+    
+    $stmtRP = $pdo->prepare("INSERT INTO RESTOS_PAGAR (orgao,uniorcam,funcao,subfuncao,programa,projativ,rubrica,recurso_vinculado,contrapartida_recurso_vinculado,numero_empenho,data_empenho,valor_empenho,credor,caracteristica_peculiar_despesa,registro_precos,numero_licitacao,ano_licitacao,historico_empenho,forma_contratacao,base_legal,despesa_funcionario,licitacao_compartilhada,cnpj_gerenciador_licitacao_compartilhada,complemento_recurso_vinculado,ano_empenho,data_inicial,data_final,data_geracao,cnpj,entidade,arquivo,saldo_inicial_nao_processados,saldo_inicial_processados,nao_processados_liquidados,nao_processados_pagos,processados_pagos,nao_processados_cancelados,processados_cancelados,saldo_final_nao_processados,saldo_final_processados) VALUES(:orgao,:uniorcam,:funcao,:subfuncao,:programa,:projativ,:rubrica,:recurso_vinculado,:contrapartida_recurso_vinculado,:numero_empenho,:data_empenho,:valor_empenho,:credor,:caracteristica_peculiar_despesa,:registro_precos,:numero_licitacao,:ano_licitacao,:historico_empenho,:forma_contratacao,:base_legal,:despesa_funcionario,:licitacao_compartilhada,:cnpj_gerenciador_licitacao_compartilhada,:complemento_recurso_vinculado,:ano_empenho,:data_inicial,:data_final,:data_geracao,:cnpj,:entidade,:arquivo,:saldo_inicial_nao_processados,:saldo_inicial_processados,:nao_processados_liquidados,:nao_processados_pagos,:processados_pagos,:nao_processados_cancelados,:processados_cancelados,:saldo_final_nao_processados,:saldo_final_processados);");
+    $rpWriter = new PDOWriter($dfRP, $stmtRP);
+    $rpWriter->write();
+
+} catch (Exception $ex) {
+    $logger->emergency($ex->getMessage());
+    exit($ex->getCode());
+}
+
+/*try {
     $output = new File($outputSQLite);
     $latestFile = new Path($output->getFileDir(), 'latest.sqlite');
     $output->copy($latestFile->getPath());
 } catch (Exception $ex) {
     $logger->error($ex->getMessage());
     exit($ex->getCode());
-}
+}*/

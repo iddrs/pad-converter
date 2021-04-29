@@ -298,26 +298,26 @@ class RestosAPagarAssembler implements AssemblerInterface {
         
         $reader = new ArrayReader($this->data);
         $rpDF = new DataFrame($reader);
-        $rpDF = $this->decimalSeparatorChoice($rpDF);
+//        $rpDF = $this->decimalSeparatorChoice($rpDF);
 //        print_r($rpDF->getColTypes());
         return $rpDF;
     }
     
-    protected function decimalSeparatorChoice(DataFrame $dataFrame): DataFrame {
-        $colTypes = $dataFrame->getColTypes();
-        
-        foreach($colTypes as $colName => $type){
-            switch($type){
-                case 'double':
-                case 'float':
-                $dataFrame->applyOnCols($colName, function($cell){
-                    return number_format($cell, 2, ',', '.');
-                });
-                break;
-            }
-        }
-        
-        return $dataFrame;
-    }
+//    protected function decimalSeparatorChoice(DataFrame $dataFrame): DataFrame {
+//        $colTypes = $dataFrame->getColTypes();
+//        
+//        foreach($colTypes as $colName => $type){
+//            switch($type){
+//                case 'double':
+//                case 'float':
+//                $dataFrame->applyOnCols($colName, function($cell){
+//                    return number_format($cell, 2, ',', '.');
+//                });
+//                break;
+//            }
+//        }
+//        
+//        return $dataFrame;
+//    }
 
 }

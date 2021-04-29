@@ -6,16 +6,22 @@
 require_once 'vendor/autoload.php';
 require 'config.php';
 
+use IDDRS\SIAPC\PAD\Converter\Assembler\LiquidacaoAssembler;
+use IDDRS\SIAPC\PAD\Converter\Assembler\PagamentoAssembler;
 use IDDRS\SIAPC\PAD\Converter\Assembler\RestosAPagarAssembler;
 use IDDRS\SIAPC\PAD\Converter\Exception\ErrorException;
+use IDDRS\SIAPC\PAD\Converter\Parser\ParserFactory;
+use IDDRS\SIAPC\PAD\Converter\Processor\Processor;
+use IDDRS\SIAPC\PAD\Converter\Reader\InputReader;
 use IDDRS\SIAPC\PAD\Converter\Writer\CSVWriter;
 use PTK\DataFrame\DataFrame;
 use PTK\DataFrame\Reader\CSVReader;
+use PTK\DataFrame\Writer\CSVWriter as CSVWriter2;
+use PTK\FS\Directory;
 use PTK\FS\Path;
 use PTK\Log\Formatter\CLImateFormatter;
 use PTK\Log\Logger\Logger;
 use PTK\Log\Writer\CLImateWriter;
-use PTK\DataFrame\Writer\CSVWriter as CSVWriter2;
 
 try {
     $defaultWriter = new CLImateWriter();
@@ -25,7 +31,7 @@ try {
     echo $ex->getMessage();
     exit($ex->getCode());
 }
-/*
+
 try {
     if (file_exists($outputCSV)) {
         $logger->info('Apagando conteúdo original...');
@@ -33,7 +39,7 @@ try {
         $oCSV->recursive()->delete();
     }
 } catch (Exception $ex) {
-    $logger->notice($ex->getMessage());
+    $logger->notice($ex->getTraceAsString());
 }
 
 try {
@@ -45,7 +51,7 @@ try {
     $processor = new Processor($reader, $writer, $parserFactory, $logger);
     $processor->convert();
 } catch (Exception $ex) {
-    $logger->emergency($ex->getMessage());
+    $logger->emergency($ex->getTraceAsString());
     exit($ex->getCode());
 }
 
@@ -77,7 +83,7 @@ try {
     $liquidacaoWriter = new CSVWriter2($dfLiquidacao, $liquidacaoHandle, ';', true);
     $liquidacaoWriter->write();
 } catch (Exception $ex) {
-    $logger->emergency($ex->getMessage());
+    $logger->emergency($ex->getTraceAsString());
     exit($ex->getCode());
 }
 
@@ -109,10 +115,9 @@ try {
     $pagamentoWriter = new CSVWriter2($dfPagamento, $pagamentoHandle, ';', true);
     $pagamentoWriter->write();
 } catch (Exception $ex) {
-    $logger->emergency($ex->getMessage());
+    $logger->emergency($ex->getTraceAsString());
     exit($ex->getCode());
 }
-*/
 
 try {
     $logger->info('Gerando arquivo RESTOS_PAGAR...');
@@ -140,8 +145,20 @@ try {
 
     $rpAssembler = new RestosAPagarAssembler($empenho, $liquidac, $pagament);
     $dfRP = $rpAssembler->assemble();
+    
+    $colTypes = $dfRP->getColTypes();
+        
+    foreach($colTypes as $colName => $type){
+        switch($type){
+            case 'double':
+            case 'float':
+            $dfRP->applyOnCols($colName, function($cell){
+                return number_format($cell, 2, ',', '.');
+            });
+            break;
+        }
+    }
 
-//    print_r($dfRP->getAsArray());
     $rpOutput = new Path($outputCSV, 'RESTOS_PAGAR.csv');
     $rpHandle = fopen($rpOutput->getPath(), 'w');
     if ($rpHandle === false) {
@@ -150,13 +167,10 @@ try {
     $rpWriter = new CSVWriter2($dfRP, $rpHandle, ';', true);
     $rpWriter->write();
 } catch (Exception $ex) {
-//    $logger->emergency($ex->getMessage());
-//    $logger->emergency($ex->getFile());
-//    $logger->emergency($ex->getLine());
     $logger->emergency($ex->getTraceAsString());
     exit($ex->getCode());
 }
-/*
+
 try {
     $logger->info('Apagando conteúdo de latest...');
     $latestPath = new Path(dirname($outputCSV), 'latest');
@@ -167,7 +181,6 @@ try {
     $output = new Directory($outputCSV);
     $output->copy($latestPath->getPath());
 } catch (Exception $ex) {
-    $logger->error($ex->getMessage());
+    $logger->error($ex->getTraceAsString());
     exit($ex->getCode());
 }
-*/
