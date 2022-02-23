@@ -2,10 +2,10 @@
 namespace IDDRS\SIAPC\PAD\Converter\Reader;
 
 use DateTime;
-use IDDRS\SIAPC\PAD\Converter\Data\Data;
-use IDDRS\SIAPC\PDA\Converter\Exception\ErrorException;
-use IDDRS\SIAPC\PDA\Converter\Exception\WarningException;
 use Iterator;
+use IDDRS\SIAPC\PAD\Converter\Data\Data;
+use IDDRS\SIAPC\PAD\Converter\Exception\ErrorException;
+use IDDRS\SIAPC\PAD\Converter\Exception\WarningException;
 
 class InputReader implements Iterator
 {
@@ -92,7 +92,7 @@ class InputReader implements Iterator
         return $data;
     }
 
-    public function current()
+    public function current(): mixed
     {
         $current = current($this->files);
         if ($current === false) {
@@ -101,7 +101,7 @@ class InputReader implements Iterator
         return $this->readFile($current);
     }
 
-    public function key()
+    public function key(): mixed
     {
         return key($this->files);
     }

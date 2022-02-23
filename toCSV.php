@@ -6,22 +6,24 @@
 require_once 'vendor/autoload.php';
 require 'config.php';
 
-use IDDRS\SIAPC\PAD\Converter\Assembler\LiquidacaoAssembler;
-use IDDRS\SIAPC\PAD\Converter\Assembler\PagamentoAssembler;
-use IDDRS\SIAPC\PAD\Converter\Assembler\RestosAPagarAssembler;
-use IDDRS\SIAPC\PAD\Converter\Exception\ErrorException;
-use IDDRS\SIAPC\PAD\Converter\Parser\ParserFactory;
-use IDDRS\SIAPC\PAD\Converter\Processor\Processor;
-use IDDRS\SIAPC\PAD\Converter\Reader\InputReader;
-use IDDRS\SIAPC\PAD\Converter\Writer\CSVWriter;
-use PTK\DataFrame\DataFrame;
-use PTK\DataFrame\Reader\CSVReader;
-use PTK\DataFrame\Writer\CSVWriter as CSVWriter2;
-use PTK\FS\Directory;
 use PTK\FS\Path;
-use PTK\Log\Formatter\CLImateFormatter;
+use PTK\FS\Directory;
 use PTK\Log\Logger\Logger;
+use PTK\DataFrame\DataFrame;
 use PTK\Log\Writer\CLImateWriter;
+use PTK\DataFrame\Reader\CSVReader;
+use PTK\Log\Formatter\CLImateFormatter;
+use IDDRS\SIAPC\PAD\Converter\Writer\CSVWriter;
+use IDDRS\SIAPC\PAD\Converter\Reader\InputReader;
+use PTK\DataFrame\Writer\CSVWriter as CSVWriter2;
+use IDDRS\SIAPC\PAD\Converter\Processor\Processor;
+use IDDRS\SIAPC\PAD\Converter\Parser\ParserFactory;
+use IDDRS\SIAPC\PAD\Converter\Exception\ErrorException;
+use IDDRS\SIAPC\PAD\Converter\Assembler\BalRecAltAssembler;
+use IDDRS\SIAPC\PAD\Converter\Assembler\PagamentoAssembler;
+use IDDRS\SIAPC\PAD\Converter\Assembler\BrecAntAltAssembler;
+use IDDRS\SIAPC\PAD\Converter\Assembler\LiquidacaoAssembler;
+use IDDRS\SIAPC\PAD\Converter\Assembler\RestosAPagarAssembler;
 
 try {
     $defaultWriter = new CLImateWriter();
@@ -166,6 +168,56 @@ try {
     }
     $rpWriter = new CSVWriter2($dfRP, $rpHandle, ';', true);
     $rpWriter->write();
+} catch (Exception $ex) {
+    $logger->emergency($ex->getTraceAsString());
+    exit($ex->getCode());
+}
+
+try {
+    $logger->info('Gerando arquivo BAL_REC_ALT...');
+
+    $balRecPath = new Path($outputCSV, 'BAL_REC.csv');
+    $balRecHandle = fopen($balRecPath->getRealPath(), 'r');
+    if ($balRecHandle === false) {
+        throw new ErrorException("Falha ao abrir {$balRecPath->getPath()}");
+    }
+    $balRec = new DataFrame(new CSVReader($balRecHandle, ';', true));
+    
+    $balRecAltAssembler = new BalRecAltAssembler($balRec);
+    $dfBalRecAlt = $balRecAltAssembler->assemble();
+
+    $balRecAltOutput = new Path($outputCSV, 'BAL_REC_ALT.csv');
+    $balRecAltHandle = fopen($balRecAltOutput->getPath(), 'w');
+    if ($balRecAltHandle === false) {
+        throw new ErrorException("Falha ao abrir {$balRecAltOutput->getPath()}");
+    }
+    $balRecAltWriter = new CSVWriter2($dfBalRecAlt, $balRecAltHandle, ';', true);
+    $balRecAltWriter->write();
+} catch (Exception $ex) {
+    $logger->emergency($ex->getTraceAsString());
+    exit($ex->getCode());
+}
+
+try {
+    $logger->info('Gerando arquivo BREC_ANT_ALT...');
+
+    $brecAntPath = new Path($outputCSV, 'BREC_ANT.csv');
+    $brecAntHandle = fopen($brecAntPath->getRealPath(), 'r');
+    if ($brecAntHandle === false) {
+        throw new ErrorException("Falha ao abrir {$brecAntPath->getPath()}");
+    }
+    $brecAnt = new DataFrame(new CSVReader($brecAntHandle, ';', true));
+    
+    $brecAntAltAssembler = new BrecAntAltAssembler($brecAnt);
+    $dfBrecAntAlt = $brecAntAltAssembler->assemble();
+    
+    $brecAntAltOutput = new Path($outputCSV, 'BREC_ANT_ALT.csv');
+    $brecAntAltHandle = fopen($brecAntAltOutput->getPath(), 'w');
+    if ($brecAntAltHandle === false) {
+        throw new ErrorException("Falha ao abrir {$brecAntAltOutput->getPath()}");
+    }
+    $brecAntAltWriter = new CSVWriter2($dfBrecAntAlt, $brecAntAltHandle, ';', true);
+    $brecAntAltWriter->write();
 } catch (Exception $ex) {
     $logger->emergency($ex->getTraceAsString());
     exit($ex->getCode());
