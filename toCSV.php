@@ -21,8 +21,10 @@ use IDDRS\SIAPC\PAD\Converter\Parser\ParserFactory;
 use IDDRS\SIAPC\PAD\Converter\Exception\ErrorException;
 use IDDRS\SIAPC\PAD\Converter\Assembler\BalRecAltAssembler;
 use IDDRS\SIAPC\PAD\Converter\Assembler\PagamentoAssembler;
+use IDDRS\SIAPC\PAD\Converter\Assembler\RecAntAltAssembler;
 use IDDRS\SIAPC\PAD\Converter\Assembler\BrecAntAltAssembler;
 use IDDRS\SIAPC\PAD\Converter\Assembler\LiquidacaoAssembler;
+use IDDRS\SIAPC\PAD\Converter\Assembler\ReceitaAltAssembler;
 use IDDRS\SIAPC\PAD\Converter\Assembler\RestosAPagarAssembler;
 
 try {
@@ -218,6 +220,56 @@ try {
     }
     $brecAntAltWriter = new CSVWriter2($dfBrecAntAlt, $brecAntAltHandle, ';', true);
     $brecAntAltWriter->write();
+} catch (Exception $ex) {
+    $logger->emergency($ex->getTraceAsString());
+    exit($ex->getCode());
+}
+
+try {
+    $logger->info('Gerando arquivo RECEITA_ALT...');
+
+    $receitaPath = new Path($outputCSV, 'RECEITA.csv');
+    $receitaHandle = fopen($receitaPath->getRealPath(), 'r');
+    if ($receitaHandle === false) {
+        throw new ErrorException("Falha ao abrir {$receitaPath->getPath()}");
+    }
+    $receita = new DataFrame(new CSVReader($receitaHandle, ';', true));
+    
+    $receitaAltAssembler = new ReceitaAltAssembler($receita);
+    $dfReceitaAlt = $receitaAltAssembler->assemble();
+    
+    $receitaAltOutput = new Path($outputCSV, 'RECEITA_ALT.csv');
+    $receitaAltHandle = fopen($receitaAltOutput->getPath(), 'w');
+    if ($receitaAltHandle === false) {
+        throw new ErrorException("Falha ao abrir {$receitaAltOutput->getPath()}");
+    }
+    $receitaAltWriter = new CSVWriter2($dfReceitaAlt, $receitaAltHandle, ';', true);
+    $receitaAltWriter->write();
+} catch (Exception $ex) {
+    $logger->emergency($ex->getTraceAsString());
+    exit($ex->getCode());
+}
+
+try {
+    $logger->info('Gerando arquivo REC_ANT_ALT...');
+
+    $recAntPath = new Path($outputCSV, 'REC_ANT.csv');
+    $recAntHandle = fopen($recAntPath->getRealPath(), 'r');
+    if ($recAntHandle === false) {
+        throw new ErrorException("Falha ao abrir {$recAntPath->getPath()}");
+    }
+    $recAnt = new DataFrame(new CSVReader($recAntHandle, ';', true));
+    
+    $recAntAltAssembler = new RecAntAltAssembler($recAnt);
+    $dfRecAntAlt = $recAntAltAssembler->assemble();
+    
+    $recAntAltOutput = new Path($outputCSV, 'REC_ANT_ALT.csv');
+    $recAntAltHandle = fopen($recAntAltOutput->getPath(), 'w');
+    if ($recAntAltHandle === false) {
+        throw new ErrorException("Falha ao abrir {$recAntAltOutput->getPath()}");
+    }
+    $recAntAltWriter = new CSVWriter2($dfRecAntAlt, $recAntAltHandle, ';', true);
+    $recAntAltWriter->write();
 } catch (Exception $ex) {
     $logger->emergency($ex->getTraceAsString());
     exit($ex->getCode());
