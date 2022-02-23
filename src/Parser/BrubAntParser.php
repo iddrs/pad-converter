@@ -2,15 +2,15 @@
 
 namespace IDDRS\SIAPC\PAD\Converter\Parser;
 
+use PTK\DataFrame\DataFrame;
+use IDDRS\SIAPC\PAD\Converter\Parser\ParserAbstract;
 use IDDRS\SIAPC\PAD\Converter\Exception\WarningException;
 use IDDRS\SIAPC\PAD\Converter\Formatter\CodigosFormatter;
 use IDDRS\SIAPC\PAD\Converter\Formatter\ValoresFormatter;
-use IDDRS\SIAPC\PAD\Converter\Parser\ParserAbstract;
-use PTK\DataFrame\DataFrame;
 
 class BrubAntParser extends ParserAbstract {
 
-    protected array $colSizes = [2, 2, 2, 3, 4, 3, 5, 15, 4, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 4];
+    protected array $colSizes = [2, 2, 2, 3, 4, 3, 5, 15, 4, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 4, 4, 4];
     protected array $colNames = [
         'orgao',
         'uniorcam',
@@ -39,7 +39,9 @@ class BrubAntParser extends ParserAbstract {
         'pago_4bim',
         'pago_5bim',
         'pago_6bim',
-        'complemento_recurso_vinculado'
+        'complemento_recurso_vinculado',
+        'fonte_recurso_stn',
+        'acompanhamento_execucao_orcamentaria'
     ];
 
     public function __construct() {

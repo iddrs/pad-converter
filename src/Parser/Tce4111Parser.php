@@ -2,15 +2,15 @@
 
 namespace IDDRS\SIAPC\PAD\Converter\Parser;
 
+use PTK\DataFrame\DataFrame;
+use IDDRS\SIAPC\PAD\Converter\Parser\ParserAbstract;
 use IDDRS\SIAPC\PAD\Converter\Exception\WarningException;
 use IDDRS\SIAPC\PAD\Converter\Formatter\CodigosFormatter;
 use IDDRS\SIAPC\PAD\Converter\Formatter\ValoresFormatter;
-use IDDRS\SIAPC\PAD\Converter\Parser\ParserAbstract;
-use PTK\DataFrame\DataFrame;
 
 class Tce4111Parser extends ParserAbstract {
 
-    protected array $colSizes = [20, 2, 2, 4, 12, 12, 13, 8, 17, 1, 12, 150, 1, 1, 1, 4, 4];
+    protected array $colSizes = [20, 2, 2, 4, 12, 12, 13, 8, 17, 1, 12, 150, 1, 1, 1, 4, 4, 4, 4];
     protected array $colNames = [
         'conta_contabil',
         'orgao',
@@ -28,7 +28,9 @@ class Tce4111Parser extends ParserAbstract {
         'natureza_informacao',
         'indicador_superavit_financeiro',
         'recurso_vinculado',
-        'complemento_recurso_vinculado'
+        'complemento_recurso_vinculado',
+        'fonte_recurso_stn',
+        'acompanhamento_execucao_orcamentaria'
     ];
 
     public function __construct() {

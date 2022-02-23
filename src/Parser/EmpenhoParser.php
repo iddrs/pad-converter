@@ -2,15 +2,15 @@
 
 namespace IDDRS\SIAPC\PAD\Converter\Parser;
 
+use PTK\DataFrame\DataFrame;
+use IDDRS\SIAPC\PAD\Converter\Parser\ParserAbstract;
 use IDDRS\SIAPC\PAD\Converter\Exception\WarningException;
 use IDDRS\SIAPC\PAD\Converter\Formatter\CodigosFormatter;
 use IDDRS\SIAPC\PAD\Converter\Formatter\ValoresFormatter;
-use IDDRS\SIAPC\PAD\Converter\Parser\ParserAbstract;
-use PTK\DataFrame\DataFrame;
 
 class EmpenhoParser extends ParserAbstract {
 
-    protected array $colSizes = [2, 2, 2, 3, 4, 3, 5, 15, 4, 4, 13, 8, 13, 1, 10, 165, 3, 2, 1, 20, 20, 4, 400, 3, 2, 1, 1, 14, 4];
+    protected array $colSizes = [2, 2, 2, 3, 4, 3, 5, 15, 4, 4, 13, 8, 13, 1, 10, 165, 3, 2, 1, 20, 20, 4, 400, 3, 2, 1, 1, 14, 4, 4, 4];
     protected array $colNames = [
         'orgao',
         'uniorcam',
@@ -40,7 +40,9 @@ class EmpenhoParser extends ParserAbstract {
         'despesa_funcionario',
         'licitacao_compartilhada',
         'cnpj_gerenciador_licitacao_compartilhada',
-        'complemento_recurso_vinculado'
+        'complemento_recurso_vinculado',
+        'fonte_recurso_stn',
+        'acompanhamento_execucao_orcamentaria'
     ];
 
     public function __construct() {

@@ -2,15 +2,15 @@
 
 namespace IDDRS\SIAPC\PAD\Converter\Parser;
 
+use PTK\DataFrame\DataFrame;
+use IDDRS\SIAPC\PAD\Converter\Parser\ParserAbstract;
 use IDDRS\SIAPC\PAD\Converter\Exception\WarningException;
 use IDDRS\SIAPC\PAD\Converter\Formatter\CodigosFormatter;
 use IDDRS\SIAPC\PAD\Converter\Formatter\ValoresFormatter;
-use IDDRS\SIAPC\PAD\Converter\Parser\ParserAbstract;
-use PTK\DataFrame\DataFrame;
 
 class DecretoParser extends ParserAbstract {
 
-    protected array $colSizes = [20, 8, 20, 8, 13, 13, 1, 1, 1, 13, 8, 13];
+    protected array $colSizes = [20, 8, 20, 8, 13, 13, 1, 1, 1, 13, 8, 13, 4, 4, 4, 4];
     protected array $colNames = [
         'numero_lei',
         'data_lei',
@@ -23,7 +23,11 @@ class DecretoParser extends ParserAbstract {
         'alteracoes_orcamentarias',
         'valor_alteracoes',
         'data_reabertura_credito_adicional',
-        'valor_saldo_reaberto'
+        'valor_saldo_reaberto',
+        'recurso_vinculado_suplementacao_demais_tce',
+        'recurso_vinculado_reducao_tce',
+        'recurso_vinculado_suplementacao_demais_stn',
+        'recurso_vinculado_reducao_stn'
     ];
 
     public function __construct() {

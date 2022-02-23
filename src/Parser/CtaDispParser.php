@@ -2,15 +2,15 @@
 
 namespace IDDRS\SIAPC\PAD\Converter\Parser;
 
+use PTK\DataFrame\DataFrame;
+use IDDRS\SIAPC\PAD\Converter\Parser\ParserAbstract;
 use IDDRS\SIAPC\PAD\Converter\Exception\WarningException;
 use IDDRS\SIAPC\PAD\Converter\Formatter\CodigosFormatter;
 use IDDRS\SIAPC\PAD\Converter\Formatter\ValoresFormatter;
-use IDDRS\SIAPC\PAD\Converter\Parser\ParserAbstract;
-use PTK\DataFrame\DataFrame;
 
 class CtaDispParser extends ParserAbstract {
 
-    protected array $colSizes = [20,2,2,4,5,5,20,1,1,4];
+    protected array $colSizes = [20,2,2,4,5,5,20,1,1,4,4,4];
     protected array $colNames = [
         'conta_contabil',
         'orgao',
@@ -21,7 +21,9 @@ class CtaDispParser extends ParserAbstract {
         'conta_corrente',
         'tipo_conta_corrente',
         'classificacao_disponivel',
-        'complemento_recurso_vinculado'
+        'complemento_recurso_vinculado',
+        'fonte_recurso_stn',
+        'acompanhamento_execucao_orcamentaria'
     ];
 
     public function __construct() {

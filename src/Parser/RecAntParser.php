@@ -2,15 +2,15 @@
 
 namespace IDDRS\SIAPC\PAD\Converter\Parser;
 
+use PTK\DataFrame\DataFrame;
+use IDDRS\SIAPC\PAD\Converter\Parser\ParserAbstract;
 use IDDRS\SIAPC\PAD\Converter\Exception\WarningException;
 use IDDRS\SIAPC\PAD\Converter\Formatter\CodigosFormatter;
 use IDDRS\SIAPC\PAD\Converter\Formatter\ValoresFormatter;
-use IDDRS\SIAPC\PAD\Converter\Parser\ParserAbstract;
-use PTK\DataFrame\DataFrame;
 
 class RecAntParser extends ParserAbstract {
 
-    protected array $colSizes = [20, 2, 2, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 3, 4, 4];
+    protected array $colSizes = [20, 2, 2, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 3, 4, 4, 4, 4];
     protected array $colNames = [
         'codigo_receita',
         'orgao',
@@ -29,7 +29,9 @@ class RecAntParser extends ParserAbstract {
         'receita_realizada_dez',
         'caracteristica_peculiar_receita',
         'recurso_vinculado',
-        'complemento_recurso_vinculado'
+        'complemento_recurso_vinculado',
+        'fonte_recurso_stn',
+        'acompanhamento_execucao_orcamentaria'
     ];
 
     public function __construct() {

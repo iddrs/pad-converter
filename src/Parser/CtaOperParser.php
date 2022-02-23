@@ -2,15 +2,15 @@
 
 namespace IDDRS\SIAPC\PAD\Converter\Parser;
 
+use PTK\DataFrame\DataFrame;
+use IDDRS\SIAPC\PAD\Converter\Parser\ParserAbstract;
 use IDDRS\SIAPC\PAD\Converter\Exception\WarningException;
 use IDDRS\SIAPC\PAD\Converter\Formatter\CodigosFormatter;
 use IDDRS\SIAPC\PAD\Converter\Formatter\ValoresFormatter;
-use IDDRS\SIAPC\PAD\Converter\Parser\ParserAbstract;
-use PTK\DataFrame\DataFrame;
 
 class CtaOperParser extends ParserAbstract {
 
-    protected array $colSizes = [30, 8, 13, 1, 2, 2, 20, 2, 2, 20, 4, 4];
+    protected array $colSizes = [30, 8, 13, 1, 2, 2, 20, 2, 2, 20, 4, 4,4 ,4];
     protected array $colNames = [
         'codigo_operacao',
         'data_operacao',
@@ -23,7 +23,9 @@ class CtaOperParser extends ParserAbstract {
         'conta_contabil',
         'orgao_contabil',
         'uniorcam_contabil',
-        'complemento_recurso_vinculado'
+        'complemento_recurso_vinculado',
+        'fonte_recurso_stn',
+        'acompanhamento_execucao_orcamentaria'
     ];
 
     public function __construct() {

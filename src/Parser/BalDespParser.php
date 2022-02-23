@@ -2,15 +2,15 @@
 
 namespace IDDRS\SIAPC\PAD\Converter\Parser;
 
+use PTK\DataFrame\DataFrame;
+use IDDRS\SIAPC\PAD\Converter\Parser\ParserAbstract;
 use IDDRS\SIAPC\PAD\Converter\Exception\WarningException;
 use IDDRS\SIAPC\PAD\Converter\Formatter\CodigosFormatter;
 use IDDRS\SIAPC\PAD\Converter\Formatter\ValoresFormatter;
-use IDDRS\SIAPC\PAD\Converter\Parser\ParserAbstract;
-use PTK\DataFrame\DataFrame;
 
 class BalDespParser extends ParserAbstract {
 
-    protected array $colSizes = [2, 2, 2, 3, 4, 3, 5, 6, 4, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 4, 13, 13, 13];
+    protected array $colSizes = [2, 2, 2, 3, 4, 3, 5, 6, 4, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 4, 13, 13, 13, 4, 4];
     protected array $colNames = [
         'orgao',
         'uniorcam',
@@ -38,7 +38,9 @@ class BalDespParser extends ParserAbstract {
         'complemento_recurso_vinculado',
         'transferencia',
         'transposicao',
-        'remanejamento'
+        'remanejamento',
+        'fonte_recurso_stn',
+        'acompanhamento_execucao_orcamentaria'
     ];
 
     public function __construct() {

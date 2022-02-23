@@ -2,15 +2,15 @@
 
 namespace IDDRS\SIAPC\PAD\Converter\Parser;
 
+use PTK\DataFrame\DataFrame;
+use IDDRS\SIAPC\PAD\Converter\Parser\ParserAbstract;
 use IDDRS\SIAPC\PAD\Converter\Exception\WarningException;
 use IDDRS\SIAPC\PAD\Converter\Formatter\CodigosFormatter;
 use IDDRS\SIAPC\PAD\Converter\Formatter\ValoresFormatter;
-use IDDRS\SIAPC\PAD\Converter\Parser\ParserAbstract;
-use PTK\DataFrame\DataFrame;
 
 class BrecAntParser extends ParserAbstract {
 
-    protected array $colSizes = [20, 2, 2, 13, 13, 4, 170, 1, 2, 3, 4];
+    protected array $colSizes = [20, 2, 2, 13, 13, 4, 170, 1, 2, 3, 4, 4, 4];
     protected array $colNames = [
         'codigo_receita',
         'orgao',
@@ -22,7 +22,9 @@ class BrecAntParser extends ParserAbstract {
         'tipo_nivel',
         'numero_nivel',
         'caracteristica_peculiar_receita',
-        'complemento_recurso_vinculado'
+        'complemento_recurso_vinculado',
+        'fonte_recurso_stn',
+        'acompanhamento_execucao_orcamentaria'
     ];
 
     public function __construct() {
