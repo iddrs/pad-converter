@@ -10,6 +10,7 @@ namespace IDDRS\SIAPC\PAD\Converter\Formatter;
 class ValoresFormatter extends FormatterBase {
 
     public static function dataStrToStr(string $date): ?string {
+        if(!$date) return null;
         $dateObj = date_create_from_format('dmY', $date);
         if (checkdate($dateObj->format('m'), $dateObj->format('d'), $dateObj->format('Y'))) {
             return $dateObj->format('Y-m-d');
@@ -19,7 +20,7 @@ class ValoresFormatter extends FormatterBase {
     }
 
     public static function valorSemSinal(string $valor): float {
-        return round($valor / 100, 2);
+        return round(((float) $valor) / 100, 2);
     }
 
     public static function valorComSinal(string $campoValor, string $campoSinal, array $line): array {
