@@ -20,7 +20,8 @@
         "php": ">=8.0.3",
         "php-tool-kit/df": "dev-main",
         "php-tool-kit/fs": "dev-master",
-        "php-tool-kit/log": "dev-main"
+        "php-tool-kit/log": "dev-main",
+        "php-tool-kit/console-form": "dev-main"
     },
     "autoload": {
         "psr-4": {
