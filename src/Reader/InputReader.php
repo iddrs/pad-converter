@@ -52,7 +52,6 @@ class InputReader implements Iterator
         $cnpj = $headerData['cnpj'];
         $entityName = $headerData['entityName'];
 
-
         $numRecords = $this->parseEOF($handle);
 
 
